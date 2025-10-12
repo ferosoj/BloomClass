@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load custom_filters %}
+
+{% block content %}
+
+<style>
+    .unidad-cuestionario-container {
+        max-width: 800px;
+        margin: auto;
+        padding: 30px;
+        background: #fff;
+        border-radius: 15px;
+        box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+    }
+    .pregunta-card {
+        margin-bottom: 25px;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        background-color: #fcfcfc;
+    }
+    .opcion-label {
+        display: block;
+        padding: 12px;
+        margin: 5px 0;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background-color 0.2s, box-shadow 0.2s;
+        font-weight: 500;
+        border: 1px solid #eee;
+    }
+    .opcion-label:hover {
+        background-color: #f0f0f0;
+    }
+    .opcion-label input[type="radio"] {
+        margin-right: 10px;
+    }
+    .submit-button {
+        background-color: #9c4848;
+        color: white;
+        padding: 12px 25px;
+        border: none;
+        border-radius: 8px;
+        font-size: 1.1em;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+    .submit-button:hover:not(:disabled) {
+        background-color: #7b3a3a;
+    }
+    .submit-button:disabled {
+        background-color: #ccc;
+        cursor: not-allowed;
+    }
+</style>
+
+<h1 style="color:#9c4848; text-align:center; font-size:2.2em; margin-bottom:30px;">
+    Cuestionario: {{ unidad.titulo }}
+</h1>
+
+<div class="unidad-cuestionario-container">
+    {% if completada %}
+        <div style="text-align:center; padding:20px; background-color:#e6ffe6; border:2px solid #a3e4a3; border-radius:10px; margin-bottom:30px;">
+            <h2 style="color:#4CAF50;">¡Unidad Completada! ✅</h2>
+            <p>Ya has respondido correctamente todas las preguntas de esta unidad.</p>
+        </div>
+    {% endif %}
+
+    <form method="post">
+        {% csrf_token %}
+
+        {% for pregunta in preguntas %}
+            {% with respuesta_usuario=respuestas_usuario|get_item:pregunta.id %}
+                <div class="pregunta-card">
+                    <h3 style="color:#333; margin-top:0;">{{ forloop.counter }}. {{ pregunta.texto }}</h3>
+                    
+                    {% for opcion in pregunta.opciones.all %}
+                        {% comment %} 
+                            La variable 'highlight_style' se genera limpiamente en el bloque de abajo 
+                            para evitar el error de "empty rulesets" y gestionar la retroalimentación.
+                        {% endcomment %}
+                        
+                        {% if respuesta_usuario and respuesta_usuario.id %}
+                            {% if opcion.es_correcta %}
+                                {% with highlight_style='background-color:#d4edda; border-color:#c3e6cb;' %} {% endwith %}
+                            {% elif respuesta_usuario.opcion.id == opcion.id and not opcion.es_correcta %}
+                                {% with highlight_style='background-color:#f8d7da; border-color:#f5c6cb;' %} {% endwith %}
+                            {% else %}
+                                {% with highlight_style='' %} {% endwith %}
+                            {% endif %}
+                        {% else %}
+                            {% with highlight_style='' %} {% endwith %}
+                        {% endif %}
+
+                        <label class="opcion-label" 
+                               style="{{ highlight_style }}">
+                            
+                            <input type="radio" 
+                                   name="pregunta_{{ pregunta.id }}" 
+                                   value="{{ opcion.id }}" 
+                                   {% if completada %}disabled{% endif %}
+                                   {% if respuesta_usuario and respuesta_usuario.opcion.id == opcion.id %}checked{% endif %}>
+                            
+                            {{ opcion.texto }}
+                            
+                            {% comment %} 
+                                Aquí se corrige el error de sintaxis al asegurar espacios en la comparación 
+                                y se verifica que 'respuesta_usuario' exista antes de mostrar el check/cross. 
+                            {% endcomment %}
+                            {% if respuesta_usuario and respuesta_usuario.id %}
+                                {% if opcion.es_correcta %}
+                                    <span style="color: green; margin-left: 5px;">✅</span> 
+                                {% elif respuesta_usuario.opcion.id == opcion.id and not opcion.es_correcta %}
+                                    <span style="color: red; margin-left: 5px;">❌</span>
+                                {% endif %}
+                            {% endif %}
+                        </label>
+                    {% endfor %}
+                </div>
+            {% endwith %}
+        {% endfor %}
+
+        <div style="text-align:center; margin-top:30px;">
+            {% if not completada %}
+                <button type="submit" class="submit-button">Enviar Respuestas</button>
+            {% else %}
+                <a href="{% url 'detalle_curso' unidad.curso.id %}" class="submit-button" style="text-decoration:none; display:inline-block;">Volver al Curso</a>
+            {% endif %}
+        </div>
+    </form>
+</div>
+
+{% endblock %}

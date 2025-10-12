@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Mis Cursos{% endblock %}
+{% block content %}
+
+<h1 style="color:#9c4848;text-align:center;font-size:2.2em;margin-bottom:30px;">Mis Cursos</h1>
+
+<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:25px;">
+  {% for curso in cursos %}
+    <div style="background:#fff;border-radius:20px;overflow:hidden;box-shadow:0 4px 10px rgba(0,0,0,0.1);transition:transform 0.25s;">
+      {% if curso.imagen %}
+        <img src="{{ curso.imagen.url }}" alt="{{ curso.titulo }}" style="width:100%;height:180px;object-fit:cover;">
+      {% else %}
+        <img src="{% static 'img/default_curso.jpg' %}" alt="Sin imagen" style="width:100%;height:180px;object-fit:cover;">
+      {% endif %}
+      <div style="padding:15px;">
+        <h3 style="margin:0;color:#333;font-weight:600;">{{ curso.titulo }}</h3>
+        <p style="color:#666;font-size:0.9em;margin-top:8px;height:45px;overflow:hidden;">{{ curso.descripcion|truncatewords:20 }}</p>
+        <a href="{% url 'detalle_curso' curso.id %}" style="display:block;text-align:center;background-color:#9c4848;color:white;padding:10px;margin-top:10px;border-radius:8px;text-decoration:none;font-weight:600;">Ver contenido</a>
+      </div>
+    </div>
+  {% empty %}
+    <p style="text-align:center;">No estás inscrito en ningún curso todavía.</p>
+  {% endfor %}
+</div>
+
+{% endblock %}
