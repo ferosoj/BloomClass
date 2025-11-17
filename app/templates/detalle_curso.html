@@ -1,0 +1,311 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load custom_filters %}
+
+{% block content %}
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
+body {
+    font-family: 'Poppins', sans-serif !important;
+}
+
+.fondo-blobs {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    overflow: hidden;
+    background-color: #fffafc;
+}
+
+.fondo-blobs::before,
+.fondo-blobs::after {
+    content: '';
+    position: absolute;
+    width: 700px;
+    height: 700px;
+    border-radius: 50%;
+    filter: blur(90px);
+    opacity: 0.6;
+    animation: moverBlobs 25s infinite alternate ease-in-out;
+}
+
+.fondo-blobs::before {
+    background: radial-gradient(circle at 30% 30%, #ffb6c1, #f0a6ff, transparent);
+    top: -150px;
+    left: -150px;
+}
+
+.fondo-blobs::after {
+    background: radial-gradient(circle at 70% 70%, #fff176, #ffd6a5, transparent);
+    bottom: -150px;
+    right: -150px;
+}
+
+@keyframes moverBlobs {
+    0% { transform: translate(0,0) scale(1); }
+    50% { transform: translate(40px, -60px) scale(1.05); }
+    100% { transform: translate(-30px, 30px) scale(1); }
+}
+
+.titulo-wave {
+    text-align: center;
+    margin: 25px 0 15px 0;
+}
+
+.titulo-wave h1 {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    font-size: 3rem;
+    letter-spacing: 2px;
+    display: inline-block;
+    margin: 0;
+    text-shadow: 0 2px 3px rgba(0,0,0,0.2);
+}
+
+.titulo-wave h1 span {
+    display: inline-block;
+    background: linear-gradient(90deg, #ffb6c1, #e2a7ff, #fff176, #ffcc99, #ffb6c1);
+    background-size: 300% 300%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: gradientShift 5s linear infinite, waveMotion 2.8s ease-in-out infinite;
+}
+
+.wave {
+    width: 200px;
+    height: 15px;
+    margin: 10px auto 0;
+    background: linear-gradient(90deg, #f7a8b8, #e2a7ff, #fff176, #ffcc99);
+    background-size: 400% 100%;
+    border-radius: 50%;
+    animation: moveWave 3s linear infinite;
+    mask-image: radial-gradient(circle at 50% 100%, black 70%, transparent 100%);
+}
+
+@keyframes moveWave {
+    0% { background-position: 0% 0; }
+    100% { background-position: 400% 0; }
+}
+@keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 100% 50%; }
+}
+@keyframes waveMotion {
+    0%, 100% { transform: translateY(0); }
+    25% { transform: translateY(-8px); }
+    50% { transform: translateY(0); }
+    75% { transform: translateY(8px); }
+}
+
+.curso-header {
+    max-width: 1200px;
+    margin: 40px auto;
+    background: #ffffffd6;
+    border-radius: 25px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.10);
+    padding: 0 30px 40px 30px;
+    text-align: center;
+}
+
+.curso-imagen {
+    width: 100%;
+    max-height: 350px;
+    object-fit: cover;
+    border-radius: 25px 25px 0 0;
+}
+
+.unidad-card {
+    max-width: 1200px;
+    margin: 25px auto;
+    border-radius: 18px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    overflow: hidden;
+    transition: transform 0.2s ease;
+}
+
+.unidad-card:hover {
+    transform: translateX(5px);
+}
+
+.unidad-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 22px;
+    border-left: 8px solid #8ad88a;
+    background-color: #f9f9f9;
+    transition: all 0.3s ease;
+}
+
+.unidad-header.completada {
+    background-color: #e6ffe6 !important;
+    border-color: #7acb7a !important;
+}
+
+.unidad-header h3 {
+    margin: 0;
+    font-size: 1.5rem;
+    color: #333;
+}
+
+.unidad-toggle {
+    margin-left: auto;
+    text-decoration: none;
+    background-color: #9c4848;
+    color: white;
+    padding: 10px 18px;
+    border-radius: 8px;
+    font-weight: bold;
+    white-space: nowrap;
+    transition: 0.2s ease;
+    cursor: pointer;
+}
+
+.btn-completado {
+    background-color: #4caf50 !important;
+}
+
+/* Collapse */
+.contenido-collapse {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease-out;
+    padding: 0 22px;
+}
+
+.texto-box {
+    background: #fff6fa;
+    padding: 18px;
+    border-radius: 12px;
+    margin-top: 12px;
+    color: #4b3b6b;
+}
+</style>
+
+<div class="fondo-blobs"></div>
+
+<div class="curso-header">
+    {% if curso.imagen %}
+        <img src="{{ curso.imagen.url }}" class="curso-imagen">
+    {% else %}
+        <img src="{% static 'img/default.jpg' %}" class="curso-imagen">
+    {% endif %}
+
+    <div class="titulo-wave">
+        <h1>
+            {% for letra in curso.titulo %}
+                <span>{{ letra }}</span>
+            {% endfor %}
+        </h1>
+        <div class="wave"></div>
+    </div>
+
+    <p style="color:#6d4b78;margin-top:10px;font-size:1.2rem;">Contenidos del curso</p>
+</div>
+
+<div style="max-width:1200px;margin:30px auto;">
+    {% for unidad in unidades %}
+    {% with esta_completa=unidad.id|in_list:unidades_completadas_ids %}
+
+    <div class="unidad-card" id="unidad-{{ unidad.id }}">
+        <div class="unidad-header {% if esta_completa %}completada{% endif %}">
+            <div>
+                <h3>{{ unidad.titulo }}</h3>
+                <p>{{ unidad.descripcion|default:"Sin descripción." }}</p>
+            </div>
+
+            <span class="unidad-toggle {% if esta_completa %}btn-completado{% endif %}"
+                {% if unidad.tipo_contenido == 'FORM' %}
+                    onclick="window.location.href='{% url 'detalle_unidad' unidad.id %}'"
+                {% else %}
+                    data-id="{{ unidad.id }}"
+                    data-tipo="{{ unidad.tipo_contenido }}"
+                    data-video="{% if unidad.video %}{{ unidad.video.url }}{% endif %}"
+                    data-juego="{{ unidad.obtener_url_juego }}"
+                    data-texto="{{ unidad.contenido_texto }}"
+                {% endif %}>
+
+                {% if esta_completa %}
+                    ✅ Completada
+                {% else %}
+                    {% if unidad.tipo_contenido == "VIDEO" %}
+                        Ver Video
+                    {% elif unidad.tipo_contenido == "JUEGO" %}
+                        Jugar
+                    {% elif unidad.tipo_contenido == "TEXT" %}
+                        Leer
+                    {% elif unidad.tipo_contenido == "FORM" %}
+                        Contestar Cuestionario
+                    {% else %}
+                        Abrir
+                    {% endif %}
+                {% endif %}
+            </span>
+        </div>
+
+        <div id="contenido-{{ unidad.id }}" class="contenido-collapse"></div>
+    </div>
+
+    {% endwith %}
+    {% endfor %}
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    function marcarCompletada(id, card) {
+        const boton = card.querySelector(".unidad-toggle");
+        if (boton.classList.contains("btn-completado")) return;
+
+        fetch("{% url 'marcar_unidad_completada' 0 %}".replace("0", id), {
+            method: "POST",
+            headers: { "X-CSRFToken": "{{ csrf_token }}" }
+        })
+        .then(response => {
+            if (response.ok) {
+                const header = card.querySelector(".unidad-header");
+                header.classList.add("completada");
+                boton.textContent = "✅ Completada";
+                boton.classList.add("btn-completado");
+            }
+        });
+    }
+
+    document.querySelectorAll(".unidad-toggle").forEach(btn => {
+        if (btn.getAttribute('data-tipo') === 'FORM') return;
+
+        btn.addEventListener("click", function() {
+            const id = this.dataset.id;
+            const tipo = this.dataset.tipo;
+            const cont = document.getElementById("contenido-" + id);
+            const card = document.getElementById("unidad-" + id);
+
+            if (cont.style.maxHeight && cont.style.maxHeight !== "0px") {
+                cont.style.maxHeight = "0px";
+                cont.innerHTML = "";
+                return;
+            }
+
+            cont.style.maxHeight = "900px";
+
+            let contentHTML = '';
+            if (tipo === "VIDEO" && this.dataset.video) {
+                contentHTML = `<video controls style="width:100%;border-radius:12px;margin-top:12px;">
+                    <source src="${this.dataset.video}" type="video/mp4">
+                </video>`;
+            } else if (tipo === "JUEGO" && this.dataset.juego) {
+                contentHTML = `<iframe src="${this.dataset.juego}" width="100%" height="600"
+                    style="border:none;border-radius:12px;margin-top:12px;"></iframe>`;
+            } else if (tipo === "TEXT" && this.dataset.texto) {
+                contentHTML = `<div class="texto-box">${this.dataset.texto}</div>`;
+            }
+
+            cont.innerHTML = contentHTML;
+            marcarCompletada(id, card);
+        });
+    });
+});
+</script>
+
+{% endblock %}

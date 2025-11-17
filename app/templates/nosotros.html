@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #fffafc;
+    position: relative;
+}
+
+
+.fondo-blobs {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    overflow: hidden;
+    background-color: #fffafc;
+}
+
+.fondo-blobs::before,
+.fondo-blobs::after {
+    content: '';
+    position: absolute;
+    width: 700px;
+    height: 700px;
+    border-radius: 50%;
+    filter: blur(90px);
+    opacity: 0.6;
+    animation: moverBlobs 25s infinite alternate ease-in-out;
+}
+
+.fondo-blobs::before {
+    background: radial-gradient(circle at 30% 30%, #ffb6c1, #f0a6ff, transparent);
+    top: -150px;
+    left: -150px;
+}
+
+.fondo-blobs::after {
+    background: radial-gradient(circle at 70% 70%, #fff176, #ffd6a5, transparent);
+    bottom: -150px;
+    right: -150px;
+}
+
+@keyframes moverBlobs {
+    0% { transform: translate(0,0) scale(1); }
+    50% { transform: translate(40px, -60px) scale(1.05); }
+    100% { transform: translate(-30px, 30px) scale(1); }
+}
+
+
+.nosotros-container {
+    max-width: 1200px;
+    margin: 80px auto;
+    padding: 0 20px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    justify-content: center;
+}
+
+.nosotros-card {
+    background: #fffafc;
+    border-radius: 20px;
+    padding: 40px 30px;
+    flex: 1 1 400px;
+    max-width: 500px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.nosotros-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.12);
+}
+
+
+.nosotros-card h3 {
+    font-weight: 700;
+    font-size: 2rem;
+    display: inline-block;
+    margin-bottom: 20px;
+    background: linear-gradient(90deg, #ffb6c1, #e2a7ff, #fff176, #ffcc99, #ffb6c1);
+    background-size: 300% 300%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: gradientShift 5s linear infinite, waveMotion 2.8s ease-in-out infinite;
+}
+
+
+@keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 100% 50%; }
+}
+
+
+@keyframes waveMotion {
+    0%, 100% { transform: translateY(0); }
+    25% { transform: translateY(-6px); }
+    50% { transform: translateY(0); }
+    75% { transform: translateY(6px); }
+}
+
+.nosotros-card p {
+    font-weight: 400;
+    font-size: 1.05rem;
+    color: #5b476b;
+    line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+    .nosotros-container {
+        flex-direction: column;
+        gap: 25px;
+    }
+}
+</style>
+
+<div class="fondo-blobs"></div>
+
+<div class="nosotros-container">
+    <div class="nosotros-card">
+        <h3>Misión</h3>
+        <p>Promover un aprendizaje significativo mediante el uso responsable y consciente de la tecnología, entregando una plataforma educativa moderna, segura e intuitiva que permita a estudiantes y docentes desarrollar sus habilidades a través de cursos, herramientas interactivas y recursos digitales de calidad.</p>
+    </div>
+
+    <div class="nosotros-card">
+        <h3>Visión</h3>
+        <p>Ser una plataforma educativa referente en el uso ético, innovador y seguro de la tecnología, impulsando experiencias de aprendizaje digitales que fomenten la creatividad, el pensamiento crítico y el crecimiento personal, asegurando que cada usuario aproveche la tecnología como un medio para aprender, crear y transformar su entorno.</p>
+    </div>
+</div>
+{% endblock %}

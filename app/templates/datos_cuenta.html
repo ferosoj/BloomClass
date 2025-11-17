@@ -1,0 +1,144 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #fffafc;
+    position: relative;
+}
+
+/* BLOBS ANIMADOS DE FONDO */
+.fondo-blobs {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    overflow: hidden;
+    background-color: #fffafc;
+}
+
+.fondo-blobs::before,
+.fondo-blobs::after {
+    content: '';
+    position: absolute;
+    width: 700px;
+    height: 700px;
+    border-radius: 50%;
+    filter: blur(90px);
+    opacity: 0.6;
+    animation: moverBlobs 25s infinite alternate ease-in-out;
+}
+
+.fondo-blobs::before {
+    background: radial-gradient(circle at 30% 30%, #ffb6c1, #f0a6ff, transparent);
+    top: -150px;
+    left: -150px;
+}
+
+.fondo-blobs::after {
+    background: radial-gradient(circle at 70% 70%, #fff176, #ffd6a5, transparent);
+    bottom: -150px;
+    right: -150px;
+}
+
+@keyframes moverBlobs {
+    0% { transform: translate(0,0) scale(1); }
+    50% { transform: translate(40px, -60px) scale(1.05); }
+    100% { transform: translate(-30px, 30px) scale(1); }
+}
+
+/* CONTENEDOR PRINCIPAL */
+.cuenta-container {
+    max-width: 800px;
+    margin: 80px auto;
+    padding: 0 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    justify-content: center;
+}
+
+.cuenta-card {
+    background: #fffafc;
+    border-radius: 20px;
+    padding: 40px 30px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: transform 0.3s, box-shadow 0.3s;
+    text-align: center;
+}
+
+.cuenta-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.12);
+}
+
+.cuenta-card img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 25px;
+    border: 4px solid #b97acc;
+}
+
+.cuenta-card h3 {
+    font-weight: 700;
+    font-size: 1.8rem;
+    color: #4b3b6b;
+    margin-bottom: 10px;
+    background: linear-gradient(90deg, #ffb6c1, #e2a7ff, #fff176, #ffcc99, #ffb6c1);
+    background-size: 300% 300%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: gradientShift 5s linear infinite, waveMotion 2.8s ease-in-out infinite;
+}
+
+.cuenta-card p {
+    font-weight: 500;
+    font-size: 1.05rem;
+    color: #5b476b;
+    margin: 5px 0;
+    line-height: 1.6;
+}
+
+@keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 100% 50%; }
+}
+
+@keyframes waveMotion {
+    0%, 100% { transform: translateY(0); }
+    25% { transform: translateY(-6px); }
+    50% { transform: translateY(0); }
+    75% { transform: translateY(6px); }
+}
+
+@media (max-width: 768px) {
+    .cuenta-container {
+        padding: 0 10px;
+    }
+}
+</style>
+
+<div class="fondo-blobs"></div>
+
+<div class="cuenta-container">
+    <div class="cuenta-card">
+        {% if icono_equipado %}
+            <img src="{{ icono_equipado }}" alt="Icono de usuario">
+        {% else %}
+            <img src="{% static 'img/default_user.png' %}" alt="Icono de usuario">
+        {% endif %}
+
+        <h3>{{ user.username }}</h3>
+        <p><strong>Correo:</strong> {{ user.email }}</p>
+        <p><strong>Rol:</strong> {{ user.role|title }}</p>
+    </div>
+</div>
+{% endblock %}

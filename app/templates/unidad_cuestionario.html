@@ -1,0 +1,136 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load custom_filters %}
+{% load dict_extras %}
+
+{% block content %}
+<style>
+.contenedor {
+    max-width: 900px;
+    margin: 40px auto;
+    background: #fffafc;
+    border-radius: 20px;
+    padding: 35px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+    text-align: center;
+    color: #4b3b6b;
+    font-weight: 700;
+    margin-bottom: 30px;
+}
+
+.pregunta {
+    background: #fff6fa;
+    border-radius: 15px;
+    padding: 20px;
+    margin-bottom: 25px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.opcion {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+label {
+    color: #5b476b;
+}
+
+input[type="radio"] {
+    accent-color: #b692f6;
+    transform: scale(1.2);
+}
+
+.btn-success {
+    background: linear-gradient(90deg, #ff9ecd, #b692f6);
+    border: none;
+    color: white;
+    font-size: 1.1em;
+    font-weight: 600;
+    padding: 12px 30px;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.3s;
+}
+
+.btn-success:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(182, 146, 246, 0.3);
+}
+
+.volver {
+    background: #f8e5ff;
+    color: #4b3b6b;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.volver:hover {
+    background: #e1ccf7;
+}
+
+.alert-success {
+    text-align: center;
+    font-weight: 600;
+    margin-bottom: 20px;
+    font-size: 1.1em;
+}
+</style>
+
+<div class="contenedor">
+    <h2>{{ unidad.titulo }}</h2>
+    <p style="text-align:center;">{{ unidad.descripcion }}</p>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-success">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+
+    <form method="post">
+        {% csrf_token %}
+        {% for pregunta in preguntas %}
+            <div class="pregunta">
+                <p><strong>{{ pregunta.texto }}</strong></p>
+                {% for opcion in pregunta.opciones.all %}
+                    <div style="padding:5px; border-radius:5px;
+                        {% if mostrar_correccion %}
+                            {% if opcion.id in opciones_correctas|dict_get:pregunta.id %}
+                                background-color: #d4edda;
+                            {% elif respuestas_dict|dict_get:pregunta.id == opcion.id %}
+                                background-color: #f8d7da;
+                            {% endif %}
+                        {% endif %}
+                    ">
+                        <input type="radio" name="pregunta_{{ pregunta.id }}" value="{{ opcion.id }}"
+                            {% if respuestas_dict|dict_get:pregunta.id == opcion.id %}checked{% endif %}
+                            {% if completada %}disabled{% endif %}
+                        >
+                        {{ opcion.texto }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endfor %}
+
+        {% if not completada %}
+            <button type="submit" class="btn-success" style="display:block; margin:auto;">Enviar respuestas</button>
+        {% else %}
+            <p style="text-align:center; font-weight:600; color:#4caf50; margin-top:20px;">
+                Cuestionario completado con éxito
+            </p>
+        {% endif %}
+    </form>
+
+    <div style="text-align:center; margin-top:20px;">
+        <a href="{% url 'detalle_curso' unidad.curso.id %}" class="volver">Volver al curso</a>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,187 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registro - BloomClass</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background: linear-gradient(135deg, #fde2e4, #e8def8, #fff2cc, #ffd6a5);
+      background-size: 300% 300%;
+      animation: gradientShift 10s ease infinite;
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .navbar-simple {
+      background: linear-gradient(90deg, #e8b4f0, #ffb6b9);
+      padding: 18px 0;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    .navbar-simple img {
+      height: 55px;
+      vertical-align: middle;
+      border-radius: 8px;
+    }
+    .navbar-simple .brand-name {
+      display: inline-block;
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #fff;
+      margin-left: 10px;
+      vertical-align: middle;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+    }
+
+    .register-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: calc(100vh - 120px);
+      padding: 20px;
+    }
+    .form-box {
+      background-color: #ffffff;
+      padding: 40px 35px;
+      border-radius: 25px;
+      box-shadow: 0 6px 25px rgba(0,0,0,0.08);
+      width: 100%;
+      max-width: 430px;
+      transition: transform 0.3s;
+      text-align: center;
+    }
+    .form-box:hover {
+      transform: translateY(-4px);
+    }
+    .form-box h1 {
+      color: #5e3a8c;
+      font-weight: 700;
+      margin-bottom: 25px;
+      font-size: 1.9rem;
+    }
+
+    label {
+      display: block;
+      text-align: left;
+      margin-top: 12px;
+      font-weight: 600;
+      color: #a85fc7;
+    }
+    input, select {
+      width: 100%;
+      padding: 10px 12px;
+      margin-top: 6px;
+      border: 2px solid #f3cae0;
+      border-radius: 12px;
+      background-color: #fffafc;
+      color: #5a3d7a;
+      font-size: 0.95rem;
+      transition: 0.3s;
+    }
+    input:focus, select:focus {
+      border-color: #c49bff;
+      box-shadow: 0 0 8px rgba(195,155,255,0.4);
+      outline: none;
+    }
+
+    ul.helptext {
+      list-style: none;
+      margin-top: 10px;
+      text-align: left;
+      background: #fdf6ff;
+      border: 1px solid #e8d4ff;
+      border-radius: 12px;
+      padding: 12px 16px;
+      color: #6a4c93;
+      font-size: 0.9rem;
+    }
+    ul.helptext li::before {
+      content: "• ";
+      color: #c49bff;
+      font-weight: bold;
+    }
+
+    .submit-btn {
+      width: 100%;
+      padding: 12px;
+      background: linear-gradient(90deg, #ff9ecd, #c49bff);
+      color: #ffffff;
+      border: none;
+      border-radius: 30px;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 1.1rem;
+      margin-top: 20px;
+      transition: all 0.3s ease;
+    }
+    .submit-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 15px rgba(182, 146, 246, 0.3);
+    }
+
+    .form-box a {
+      display: inline-block;
+      margin-top: 18px;
+      color: #9b59b6;
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .form-box a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="navbar-simple">
+    <img src="{% static 'img/logo.png' %}" alt="Logo BloomClass">
+    <span class="brand-name">BloomClass</span>
+  </div>
+
+  <div class="register-container">
+    <div class="form-box">
+      <h1>Crear Cuenta</h1>
+
+      <form method="post">
+        {% csrf_token %}
+
+        <label for="id_username">Nombre de usuario:</label>
+        {{ form.username }}
+
+       
+        <label for="id_email">Correo electrónico:</label>
+        {{ form.email }}
+
+        <label for="id_role">Rol:</label>
+        {{ form.role }}
+
+        <label for="id_password1">Contraseña:</label>
+        {{ form.password1 }}
+        <ul class="helptext">
+          <li>Tu contraseña no puede ser demasiado similar a tu información personal.</li>
+          <li>Debe contener al menos 8 caracteres.</li>
+          <li>No puede ser una contraseña comúnmente usada.</li>
+          <li>No puede ser completamente numérica.</li>
+        </ul>
+
+        <label for="id_password2">Confirmar contraseña:</label>
+        {{ form.password2 }}
+        <p style="font-size:0.9rem; color:#777;">Repite la misma contraseña para verificarla.</p>
+
+        <button type="submit" class="submit-btn">Registrar</button>
+      </form>
+
+      <a href="{% url 'login' %}">¿Ya tienes una cuenta? Inicia sesión</a>
+    </div>
+  </div>
+</body>
+</html>

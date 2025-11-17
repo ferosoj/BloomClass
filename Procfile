@@ -1,0 +1,1 @@
+web: gunicorn bloomclass_project.wsgi:application --log-file -

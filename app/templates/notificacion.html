@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<style>
+.titulo-wave {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  font-size: 42px;
+  text-align: center;
+  margin-bottom: 35px;
+  color: var(--principal);
+  display: inline-block;
+  animation: jump 2s infinite ease-in-out;
+}
+
+@keyframes jump {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+.form-bloom label {
+  font-weight: 600;
+  color: var(--principal);
+}
+
+.form-control {
+  border-radius: 12px;
+  border: 2px solid var(--morado);
+  background: white;
+  color: var(--texto);
+  padding: 10px 14px;
+}
+
+.form-control:focus {
+  border-color: var(--rosa);
+  box-shadow: 0 0 8px rgba(249,170,197,0.6);
+}
+
+.btn-bloom {
+  background: var(--principal);
+  color: white;
+  border-radius: 12px;
+  padding: 12px 18px;
+  border: none;
+  font-weight: 600;
+  font-size: 18px;
+  width: 100%;
+  transition: all .3s ease;
+}
+
+.btn-bloom:hover {
+  background: var(--rosa);
+  transform: scale(1.05);
+}
+</style>
+
+<div class="container mt-5" style="max-width: 700px;">
+
+    <h2 class="titulo-wave">Enviar Notificación</h2>
+
+    <form method="POST" action="{% url 'enviar_correo' %}" class="form-bloom">
+        {% csrf_token %}
+
+        <label for="curso_id">Seleccionar curso:</label>
+        <select name="curso_id" class="form-control mb-4" required>
+            <option value="">Elegir curso...</option>
+            {% for curso in cursos %}
+                <option value="{{ curso.id }}">{{ curso.titulo }}</option>
+            {% endfor %}
+        </select>
+
+        <label>Asunto</label>
+        <input type="text" name="asunto" class="form-control mb-4" required>
+
+        <label>Mensaje</label>
+        <textarea name="mensaje" class="form-control mb-4" rows="5" required></textarea>
+
+        <button type="submit" class="btn-bloom">Enviar notificación</button>
+    </form>
+</div>
+
+{% endblock %}

@@ -1,0 +1,141 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<style>
+.recurso-card {
+    border-radius: 15px;
+    overflow: hidden;
+    margin-bottom: 2rem;
+    transition: transform .2s ease, box-shadow .2s ease;
+}
+.recurso-card:hover {
+    transform: scale(1.02);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+.recurso-card img {
+    max-width: 100%;
+    height: auto;
+}
+.recurso-btn {
+    padding: 0.75rem 1.5rem;
+    font-size: 1.1rem;
+    border-radius: 10px;
+    color: #fff !important;
+    text-decoration: none;
+    display: inline-block;
+}
+.btn-crear {
+    background-color: #ff6f91 !important;
+    border-color: #ff6f91 !important;
+}
+.btn-crear:hover {
+    background-color: #e65c80 !important;
+    border-color: #cc5070 !important;
+}
+.btn-tienda {
+    background-color: #ffb347 !important;
+    border-color: #ffb347 !important;
+}
+.btn-tienda:hover {
+    background-color: #ffa737 !important;
+    border-color: #e69534 !important;
+}
+.btn-verimg {
+    background-color: #fdd835 !important;
+    border-color: #fdd835 !important;
+    color: #fff !important;
+}
+.btn-verimg:hover {
+    background-color: #fbc02d !important;
+    border-color: #f9a825 !important;
+}
+.recurso-card-body {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 1rem;
+}
+</style>
+
+<div class="container mt-4 d-flex flex-column align-items-center">
+
+    <div class="card recurso-card position-relative text-white mb-4 w-100" style="max-width: 1200px;">
+        <div class="d-flex justify-content-center p-3">
+            <img src="{% static 'img/recursos2.png' %}" alt="Crear Curso">
+        </div>
+        <div class="card-body recurso-card-body">
+            <h3 class="flex-grow-1">Crear Curso</h3>
+            {% if usuario.is_profesor %}
+                <a href="{% url 'crear_curso' %}" class="recurso-btn btn-crear">Ir a Crear Curso</a>
+            {% else %}
+                <a href="{% url 'inicio' %}" class="recurso-btn btn-crear">Ir a Crear Curso</a>
+            {% endif %}
+            <button type="button" class="recurso-btn btn-verimg" data-bs-toggle="modal" data-bs-target="#modalCrearCurso">Ver Imagen</button>
+        </div>
+    </div>
+
+    <div class="card recurso-card position-relative text-white mb-4 w-100" style="max-width: 1200px;">
+        <div class="d-flex justify-content-center p-3">
+            <img src="{% static 'img/recursos1.png' %}" alt="Tienda">
+        </div>
+        <div class="card-body recurso-card-body">
+            <h3 class="flex-grow-1">Tienda</h3>
+            {% if usuario.is_profesor %}
+                <a href="{% url 'inicio' %}" class="recurso-btn btn-tienda">Ir a Tienda</a>
+            {% else %}
+                <a href="{% url 'tienda' %}" class="recurso-btn btn-tienda">Ir a Tienda</a>
+            {% endif %}
+            <button type="button" class="recurso-btn btn-verimg" data-bs-toggle="modal" data-bs-target="#modalTienda">Ver Imagen</button>
+        </div>
+    </div>
+
+</div>
+
+<div class="modal fade" id="modalCrearCurso" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-xl">
+    <div class="modal-content bg-transparent border-0">
+      <div class="modal-body p-0">
+        <img src="{% static 'img/recursos2.png' %}" class="w-100" alt="Crear Curso">
+      </div>
+      <div class="modal-footer border-0">
+        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="modalTienda" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-xl">
+    <div class="modal-content border-0">
+
+      
+      <div class="modal-body text-center p-0">
+
+        
+        <img src="{% static 'img/recursos1.png' %}" class="w-100" alt="Tienda">
+
+        
+        <div class="p-4" style="background-color: #f8f9fa;">
+          <ol class="mb-0 text-start">
+            <li><a href="https://www.arcademics.com/" target="_blank">Arcademics</a></li>
+            <li><a href="https://www.mathplayground.com/math-games.html" target="_blank">Math Playground</a></li>
+            <li><a href="https://www.mathnook.com/" target="_blank">MathNook</a></li>
+            <li><a href="https://ictgames.com/" target="_blank">ICT Games</a></li>
+          </ol>
+        </div>
+
+      </div>
+
+    
+      <div class="modal-footer border-0">
+        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cerrar</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+{% endblock %}

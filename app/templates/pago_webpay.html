@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block content %}
+<div style="max-width:600px;margin:50px auto;background:#fff;padding:30px;border-radius:15px;text-align:center;box-shadow:0 6px 15px rgba(0,0,0,0.1);">
+  <h2 style="color:#9c4848;">Procesando pago...</h2>
+  <p>Serás redirigido a Webpay para completar tu pago.</p>
+
+  <form action="{{ url }}" method="POST" id="webpay_form">
+    <input type="hidden" name="token_ws" value="{{ token }}">
+    <button type="submit" style="background:#27ae60;color:white;padding:10px 20px;border:none;border-radius:10px;margin-top:20px;cursor:pointer;">
+      Ir a Webpay 💳
+    </button>
+  </form>
+
+  <script>
+    setTimeout(() => document.getElementById("webpay_form").submit(), 1000);
+  </script>
+</div>
+{% endblock %}

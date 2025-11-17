@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+  body {
+    background: linear-gradient(135deg, #fde2e4, #e8def8, #fff2cc, #ffd6a5);
+    background-size: 300% 300%;
+    animation: gradientMove 10s ease infinite;
+  }
+  @keyframes gradientMove {
+    0% {background-position: 0% 50%;}
+    50% {background-position: 100% 50%;}
+    100% {background-position: 0% 50%;}
+  }
+  .contenedor {
+    max-width: 950px;
+    margin: 40px auto;
+    background: #fffafc;
+    border-radius: 20px;
+    padding: 35px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  }
+  h2 { text-align:center; color:#4b3b6b; font-weight:700; margin-bottom:30px; }
+  h3 { color:#b245d6; margin-top:30px; margin-bottom:15px; }
+  hr { border:none; height:2px; background:linear-gradient(to right,#ffb6b9,#fad0c4,#b8c0ff); border-radius:5px; margin:35px 0; }
+  .form-control { width:100%; padding:10px 12px; border-radius:10px; border:1px solid #e2d9f3; margin-top:8px; margin-bottom:10px; }
+  label { font-weight:600; color:#4b3b6b; }
+  .pregunta { background:#fff6fa; border-radius:15px; padding:20px; margin-bottom:25px; box-shadow:0 2px 6px rgba(0,0,0,0.05); }
+  .opcion { display:flex; align-items:center; gap:10px; margin-top:8px; }
+  .btn-success { background: linear-gradient(90deg, #ff9ecd, #b692f6); border:none; color:white; font-size:1.1em; font-weight:600; padding:12px 30px; border-radius:30px; cursor:pointer; transition: transform 0.2s, box-shadow 0.3s; }
+  .btn-success:hover { transform:translateY(-2px); box-shadow:0 6px 15px rgba(182,146,246,0.3); }
+</style>
+
+<div class="contenedor">
+  <h2>⚙️ Configurar curso: {{ curso.titulo }}</h2>
+
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <h3>Unidad 1: Cuestionario</h3>
+    <label>Título:</label>
+    <input type="text" name="titulo_form" value="{{ unidad_form.titulo }}" class="form-control">
+    <label>Descripción:</label>
+    <textarea name="descripcion_form" rows="2" class="form-control">{{ unidad_form.descripcion }}</textarea>
+
+    {% for i in "123456" %}
+    <div class="pregunta">
+      <label><strong>Pregunta {{ forloop.counter }}:</strong></label>
+      <input type="text" name="pregunta_{{ forloop.counter }}" class="form-control">
+
+      {% for j in "123" %}
+      <div class="opcion">
+        <input type="text" name="opcion_{{ forloop.parentloop.counter }}_{{ j }}" placeholder="Opción {{ j }}" class="form-control">
+        <label><input type="radio" name="correcta_{{ forloop.parentloop.counter }}" value="{{ j }}"> Correcta</label>
+      </div>
+      {% endfor %}
+    </div>
+    {% endfor %}
+
+    <hr>
+
+    <h3>Unidad 2: Video</h3>
+    <label>Título:</label>
+    <input type="text" name="titulo_video" value="{{ unidad_video.titulo }}" class="form-control">
+    <label>Descripción:</label>
+    <textarea name="descripcion_video" rows="2" class="form-control">{{ unidad_video.descripcion }}</textarea>
+    <p>Sube un archivo MP4 o usa un enlace de YouTube:</p>
+    <input type="file" name="video_archivo" accept="video/mp4" class="form-control">
+    <input type="url" name="video_url" value="{{ unidad_video.video_url }}" placeholder="https://youtube.com/..." class="form-control">
+
+    <hr>
+
+    <h3>Unidad 3: Juego</h3>
+    <label>Título:</label>
+    <input type="text" name="titulo_juego" value="{{ unidad_juego.titulo }}" class="form-control">
+    <label>Descripción:</label>
+    <textarea name="descripcion_juego" rows="2" class="form-control">{{ unidad_juego.descripcion }}</textarea>
+    <p>Sube un enlace de tu juego:</p>
+    <input type="url" name="juego_url" value="{{ unidad_juego.juego_url }}" placeholder="https://..." class="form-control">
+
+    <hr>
+
+    <h3>Unidad 4: Texto</h3>
+    <label>Título:</label>
+    <input type="text" name="titulo_texto" value="{{ unidad_texto.titulo }}" class="form-control">
+    <label>Descripción (contenido de lectura):</label>
+    <textarea name="texto_contenido" rows="5" class="form-control">{{ unidad_texto.descripcion }}</textarea>
+
+    <div style="text-align:center; margin-top:30px;">
+      <button type="submit" class="btn-success"> Guardar todo</button>
+    </div>
+  </form>
+</div>
+{% endblock %}

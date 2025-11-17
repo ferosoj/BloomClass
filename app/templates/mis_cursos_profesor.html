@@ -1,0 +1,189 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="progreso-container">
+
+  <div class="header-progreso">
+    <h2> Progreso de tus cursos</h2>
+
+    {% if user.is_authenticated and user.role == "profesor" %}
+      <a href="{% url 'crear_curso' %}" class="btn-crear-curso">
+         Crear nuevo curso
+      </a>
+    {% endif %}
+  </div>
+
+  {% if datos_cursos %}
+    {% for item in datos_cursos %}
+      <div class="curso-progreso">
+        <h3>
+          <a href="{% url 'detalle_curso' item.curso.id %}">{{ item.curso.titulo }}</a>
+        </h3>
+        <p>{{ item.curso.descripcion }}</p>
+
+        {% if item.estudiantes %}
+          <div class="tabla-container">
+            <table class="tabla-progreso">
+              <thead>
+                <tr>
+                  <th>Estudiante</th>
+                  <th>Progreso</th>
+                  <th>Completadas</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for est in item.estudiantes %}
+                <tr>
+                  <td>{{ est.nombre }}</td>
+                  <td>
+                    <div class="barra-fondo">
+                      <div class="barra-progreso" style="width:{{ est.progreso }}%"></div>
+                    </div>
+                    <small>{{ est.progreso }}%</small>
+                  </td>
+                  <td>{{ est.completadas }}/{{ est.totales }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        {% else %}
+          <p class="sin-estudiantes">No hay estudiantes inscritos aún.</p>
+        {% endif %}
+      </div>
+    {% endfor %}
+  {% else %}
+    <p class="sin-cursos">Aún no has creado ningún curso.</p>
+  {% endif %}
+</div>
+
+<style>
+
+.progreso-container {
+  max-width: 1200px;
+  margin: 40px auto;
+  background: #fffdfb;
+  border-radius: 20px;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+  padding: 40px;
+  font-family: 'Poppins', sans-serif;
+}
+
+
+.header-progreso {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.header-progreso h2 {
+  color: #6a4e77; 
+  font-weight: 700;
+  font-size: 1.8em;
+}
+
+.btn-crear-curso {
+  background: linear-gradient(90deg, #f6a5c0, #b37ed1);
+  color: white;
+  padding: 10px 20px;
+  border-radius: 10px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: all 0.2s ease;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+}
+
+.btn-crear-curso:hover {
+  opacity: 0.9;
+  transform: translateY(-2px);
+}
+
+.curso-progreso {
+  margin-top: 40px;
+  padding: 25px;
+  border-radius: 15px;
+  background: #fff9f6;
+  border: 1px solid #f8c8a0;
+  box-shadow: 0 3px 8px rgba(243, 188, 164, 0.2);
+  transition: 0.3s;
+}
+
+.curso-progreso:hover {
+  transform: translateY(-3px);
+}
+
+.curso-progreso h3 a {
+  color: #b37ed1;
+  text-decoration: none;
+  font-weight: 700;
+}
+
+.curso-progreso h3 a:hover {
+  color: #d28ee7;
+}
+
+.curso-progreso p {
+  color: #555;
+  margin-top: 5px;
+  font-size: 0.95em;
+}
+
+
+.tabla-container {
+  overflow-x: auto;
+  margin-top: 15px;
+}
+
+.tabla-progreso {
+  width: 100%;
+  border-collapse: collapse;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.tabla-progreso thead {
+  background: linear-gradient(90deg, #f6a5c0, #b37ed1);
+  color: #fff;
+}
+
+.tabla-progreso th, .tabla-progreso td {
+  padding: 12px 10px;
+  text-align: center;
+}
+
+.tabla-progreso tbody tr:nth-child(even) {
+  background-color: #fff5ee;
+}
+
+.tabla-progreso tbody tr:hover {
+  background-color: #fef1e0;
+}
+
+
+.barra-fondo {
+  width: 100%;
+  background-color: #fde5d2;
+  border-radius: 10px;
+  height: 18px;
+  position: relative;
+  overflow: hidden;
+}
+
+.barra-progreso {
+  height: 100%;
+  background: linear-gradient(90deg, #f6a5c0, #b37ed1, #ffe6a7);
+  border-radius: 10px;
+  transition: width 0.4s ease-in-out;
+}
+
+
+.sin-estudiantes, .sin-cursos {
+  color: #8b7c8f;
+  font-style: italic;
+  margin-top: 10px;
+  text-align: center;
+}
+</style>
+{% endblock %}

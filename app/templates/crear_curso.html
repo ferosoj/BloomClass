@@ -1,0 +1,172 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<style>
+
+body {
+  background: linear-gradient(180deg, #ffe3ed 0%, #fff7da 100%);
+  font-family: 'Poppins', sans-serif;
+}
+
+.crear-curso-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 90vh;
+  padding: 30px;
+}
+
+.crear-curso-card {
+  background: #ffffff;
+  width: 100%;
+  max-width: 750px;
+  padding: 45px 55px;
+  border-radius: 28px;
+  border: 2px solid #f7d3ff;
+  box-shadow: 0 10px 35px rgba(185, 122, 204, 0.18);
+  animation: fadeIn 0.8s ease;
+}
+
+.crear-curso-card h2 {
+  text-align: center;
+  font-weight: 700;
+  font-size: 2em;
+  margin-bottom: 30px;
+  background: linear-gradient(90deg, #b97acc, #f5a6c5);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.campo {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+.campo label {
+  font-weight: 600;
+  color: #6a4d82;
+  margin-bottom: 8px;
+}
+
+.campo input[type="text"],
+.campo input[type="number"],
+.campo textarea,
+.campo select {
+  width: 100%;
+  padding: 14px 16px;
+  border: 2px solid #f6c0ff;
+  border-radius: 14px;
+  background: #fff7fd;
+  color: #4b3f52;
+  font-size: 0.98em;
+  transition: 0.25s ease;
+}
+
+.campo input:focus,
+.campo textarea:focus,
+.campo select:focus {
+  outline: none;
+  border-color: #c4a1ff;
+  background: #ffffff;
+  box-shadow: 0 0 10px rgba(196, 161, 255, 0.4);
+}
+
+.campo.checkbox {
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+}
+
+.campo.checkbox label {
+  margin: 0;
+  color: #6d4f8a;
+}
+
+.campo input[type="file"] {
+  border: 2px dashed #f7bce2;
+  background: #fff2fa;
+  padding: 12px;
+  border-radius: 14px;
+  transition: 0.25s;
+}
+
+.campo input[type="file"]:hover {
+  background: #ffe8f6;
+}
+
+.form-boton {
+  text-align: center;
+  margin-top: 30px;
+}
+
+.btn-crear {
+  background: linear-gradient(90deg, #f5a6c5, #c4a1ff);
+  color: white;
+  font-weight: 700;
+  padding: 14px 40px;
+  border: none;
+  border-radius: 14px;
+  cursor: pointer;
+  font-size: 1.05em;
+  transition: 0.3s ease;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+}
+
+.btn-crear:hover {
+  background: linear-gradient(90deg, #c4a1ff, #f5a6c5);
+  transform: translateY(-3px);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+</style>
+
+<div class="crear-curso-wrapper">
+  <div class="crear-curso-card">
+    <h2>Crear nuevo curso</h2>
+
+    <form method="post" enctype="multipart/form-data" class="form-curso">
+      {% csrf_token %}
+
+      <div class="campo">
+        <label for="id_titulo">Título del curso</label>
+        {{ form.titulo }}
+      </div>
+
+      <div class="campo">
+        <label for="id_descripcion">Descripción</label>
+        {{ form.descripcion }}
+      </div>
+
+      <div class="campo checkbox">
+        <label for="id_es_gratuito">¿Es gratuito?</label>
+        {{ form.es_gratuito }}
+      </div>
+
+      <div class="campo">
+        <label for="id_precio">Precio</label>
+        {{ form.precio }}
+      </div>
+
+      <div class="campo">
+        <label for="id_imagen">Imagen</label>
+        {{ form.imagen }}
+      </div>
+
+      <div class="form-boton">
+        <button type="submit" class="btn-crear">Crear curso</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+
+
+
+{% endblock %}

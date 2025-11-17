@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load custom_filters %}
+
+{% block content %}
+
+<style>
+.tienda-card {
+    transition: transform .2s ease, box-shadow .2s ease;
+    border-radius: 15px;
+    background-color: #fff0f5; 
+}
+.tienda-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0px 8px 20px rgba(0,0,0,0.15);
+}
+.tienda-btn-comprar {
+    color: #fff;
+    background-color: #ffb347; 
+    border-color: #ffb347;
+}
+.tienda-btn-comprar:hover {
+    background-color: #ffa737;
+    border-color: #e69534;
+}
+.tienda-btn-equipar {
+    color: #fff;
+    background-color: #ff6f91; 
+    border-color: #ff6f91;
+}
+.tienda-btn-equipar:hover {
+    background-color: #e65c80;
+    border-color: #cc5070;
+}
+.tienda-btn-equipado {
+    color: #fff;
+    background-color: #fdd835; 
+    border-color: #fdd835;
+}
+.tienda-btn-equipado:hover {
+    background-color: #fbc02d;
+    border-color: #f9a825;
+}
+.tienda-btn-noalcance {
+    color: #fff;
+    background-color: #d3a1a1; 
+    border-color: #d3a1a1;
+}
+.tienda-btn-noalcance:hover {
+    background-color: #c68e8e;
+    border-color: #b77a7a;
+}
+</style>
+
+<div class="container mt-4">
+    <h1 class="text-center mb-3">Tienda</h1>
+    <p class="text-center fs-5">Tienes <strong>{{ usuario.puntos }}</strong> ⭐ puntos</p>
+
+    <div class="row mt-4">
+        {% for item in items %}
+        <div class="col-md-3 mb-4">
+            <div class="card shadow-sm text-center h-100 tienda-card">
+                <span class="badge bg-light text-dark mb-2">{{ item.get_tipo_display }}</span>
+
+                {% if item.archivo %}
+                    <img src="{{ item.archivo.url }}" class="card-img-top p-2" style="height:180px; object-fit:contain;">
+                {% else %}
+                    <div class="d-flex align-items-center justify-content-center" style="height:180px; background:#f8f9fa;">
+                        <span class="text-muted">Sin imagen</span>
+                    </div>
+                {% endif %}
+
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">{{ item.nombre }}</h5>
+                    <p class="card-text text-muted small flex-grow-1">{{ item.descripcion }}</p>
+                    <p class="fw-bold">Costo: {{ item.precio }} ⭐</p>
+
+                    {% if item.id in items_comprados %}
+                        {% with inv=inventario|get_item:item.id %}
+                            {% if inv.equipado %}
+                                <button class="btn tienda-btn-equipado w-100" disabled>Equipado ✔</button>
+                            {% else %}
+                                <a href="{% url 'equipar_item' item.id %}" class="btn tienda-btn-equipar w-100">Equipar</a>
+                            {% endif %}
+                        {% endwith %}
+                    {% else %}
+                        {% if usuario.puntos >= item.precio %}
+                            <a href="{% url 'comprar_item' item.id %}" class="btn tienda-btn-comprar w-100">Comprar</a>
+                        {% else %}
+                            <button class="btn tienda-btn-noalcance w-100" disabled>No alcanza</button>
+                        {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}

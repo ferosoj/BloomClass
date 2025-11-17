@@ -1,0 +1,138 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<style>
+  .historial-container {
+    max-width: 900px;
+    margin: 50px auto;
+    background: #ffffff;
+    padding: 35px;
+    border-radius: 20px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+    animation: fadeIn 0.3s ease-in-out;
+  }
+
+  .titulo {
+    text-align: center;
+    color: #c4a1ff;
+    font-weight: 700;
+    font-size: 32px;
+    margin-bottom: 20px;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    overflow: hidden;
+    border-radius: 15px;
+  }
+
+  thead {
+    background: #f5a6c5;;
+    color: #fff;
+  }
+
+  thead th {
+    padding: 14px;
+    font-size: 15px;
+  }
+
+  tbody tr {
+    transition: background 0.2s;
+  }
+
+  tbody tr:hover {
+    background: #fff4f4;
+  }
+
+  tbody td {
+    padding: 12px;
+    border-bottom: 1px solid #eee;
+    font-size: 15px;
+  }
+
+  .estado-ok {
+    color: #22a35a;
+    font-weight: 600;
+  }
+
+  .estado-error {
+    color: #d62828;
+    font-weight: 600;
+  }
+
+  
+  .btn-volver {
+    display: inline-block;
+    padding: 12px 25px;
+    margin-top: 25px;
+    background: #f5a6c5;;
+    color: white;
+    font-weight: 600;
+    border-radius: 12px;
+    text-decoration: none;
+    transition: 0.3s;
+    box-shadow: 0 4px 12px rgba(156, 72, 72, 0.3);
+  }
+
+  .btn-volver:hover {
+    background:#c4a1ff;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(156, 72, 72, 0.4);
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>
+
+<div class="historial-container">
+  <h2 class="titulo">💳 Historial de Pagos</h2>
+
+  {% if pagos %}
+    <table>
+      <thead>
+        <tr>
+          <th>Orden</th>
+          <th>Monto</th>
+          <th>Autorización</th>
+          <th>Estado</th>
+          <th>Fecha</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {% for pago in pagos %}
+        <tr>
+          <td>{{ pago.orden }}</td>
+          <td>${{ pago.monto }}</td>
+          <td>{{ pago.codigo_autorizacion }}</td>
+
+          <td>
+            {% if pago.estado == "AUTHORIZED" %}
+              <span class="estado-ok">✔ Aprobado</span>
+            {% else %}
+              <span class="estado-error">✘ Rechazado</span>
+            {% endif %}
+          </td>
+
+          <td>{{ pago.fecha|date:"d/m/Y H:i" }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+  {% else %}
+    <p style="text-align:center; margin-top:20px; font-size:18px;">
+      No tienes pagos registrados aún.
+    </p>
+  {% endif %}
+
+  <div style="text-align:center;">
+    <a href="{% url 'inicio' %}" class="btn-volver">⬅ Volver al inicio</a>
+  </div>
+
+</div>
+
+{% endblock %}

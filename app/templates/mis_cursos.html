@@ -1,0 +1,256 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Mis Cursos{% endblock %}
+
+{% block content %}
+
+
+<div class="fondo-blobs"></div>
+
+<div class="titulo-wave">
+  <h1 id="animated-title">Mis      Cursos</h1>
+  <div class="wave"></div>
+</div>
+
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap');
+
+:root {
+  --rosa: #ffb6c1;
+  --morado: #e2a7ff;
+  --amarillo: #fff176;
+  --durazno: #ffcc99;
+  --texto: #4b3f52;
+}
+
+
+.fondo-blobs {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  background-color: #fffafc;
+}
+
+.fondo-blobs::before,
+.fondo-blobs::after {
+  content: '';
+  position: absolute;
+  width: 700px;
+  height: 700px;
+  border-radius: 50%;
+  filter: blur(90px);
+  opacity: 0.6;
+  animation: moverBlobs 25s infinite alternate ease-in-out;
+}
+
+.fondo-blobs::before {
+  background: radial-gradient(circle at 30% 30%, #ffb6c1, #f0a6ff, transparent);
+  top: -150px;
+  left: -150px;
+}
+
+.fondo-blobs::after {
+  background: radial-gradient(circle at 70% 70%, #fff176, #ffd6a5, transparent);
+  bottom: -150px;
+  right: -150px;
+}
+
+@keyframes moverBlobs {
+  0%   { transform: translate(0,0) scale(1); }
+  50%  { transform: translate(40px, -60px) scale(1.05); }
+  100% { transform: translate(-30px, 30px) scale(1); }
+}
+
+
+.titulo-wave {
+  text-align: center;
+  margin: 70px 0 40px;
+}
+
+.titulo-wave h1 {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  font-size: 3rem;
+  letter-spacing: 2px;
+  display: inline-block;
+  margin: 0;
+  text-shadow: 0 2px 3px rgba(0,0,0,0.2);
+}
+
+.titulo-wave h1 span {
+  display: inline-block;
+  background: linear-gradient(90deg, #ffb6c1, #e2a7ff, #fff176, #ffcc99, #ffb6c1);
+  background-size: 300% 300%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradientShift 5s linear infinite, waveMotion 2.8s ease-in-out infinite;
+}
+
+.wave {
+  width: 200px;
+  height: 15px;
+  margin: 10px auto 0;
+  background: linear-gradient(90deg, #f7a8b8, #e2a7ff, #fff176, #ffcc99);
+  background-size: 400% 100%;
+  border-radius: 50%;
+  animation: moveWave 3s linear infinite;
+  mask-image: radial-gradient(circle at 50% 100%, black 70%, transparent 100%);
+}
+
+@keyframes moveWave {
+  0% { background-position: 0% 0; }
+  100% { background-position: 400% 0; }
+}
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 100% 50%; }
+}
+@keyframes waveMotion {
+  0%, 100% { transform: translateY(0); }
+  25% { transform: translateY(-8px); }
+  50% { transform: translateY(0); }
+  75% { transform: translateY(8px); }
+}
+
+
+.grid-cursos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 25px;
+  max-width: 1200px;
+  margin: 0 auto 60px;
+  padding: 0 20px;
+}
+
+.curso-card {
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 460px;
+  transition: all 0.25s ease-in-out;
+}
+
+.curso-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 8px 22px rgba(0,0,0,0.15);
+}
+
+.curso-img {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  border-radius: 15px;
+  margin-bottom: 15px;
+}
+
+.curso-card h2 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #7a56e3;
+  text-align: center;
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.curso-card p {
+  color: var(--texto);
+  font-size: 0.95rem;
+  text-align: justify;
+  flex-grow: 1;
+  overflow: hidden;
+  max-height: 90px;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+}
+
+
+.btn-ver {
+  display: inline-block;
+  background: linear-gradient(90deg, var(--morado), var(--rosa));
+  color: white;
+  font-weight: 600;
+  border-radius: 10px;
+  padding: 10px 18px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  margin-top: 10px;
+  align-self: stretch;
+  text-align: center;
+}
+
+.btn-ver:hover {
+  background: linear-gradient(90deg, var(--rosa), var(--durazno));
+  transform: scale(1.05);
+}
+
+.no-cursos {
+  text-align: center;
+  font-size: 1.1rem;
+  color: var(--texto);
+  background: white;
+  border-radius: 15px;
+  max-width: 700px;
+  margin: 60px auto;
+  padding: 30px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+}
+
+@media (max-width: 600px) {
+  .titulo-wave h1 { font-size: 2.3rem; }
+  .curso-card { min-height: 400px; }
+}
+</style>
+
+
+<div class="grid-cursos">
+  {% for curso in cursos %}
+  <div class="curso-card">
+    {% if curso.imagen %}
+      <img src="{{ curso.imagen.url }}" alt="{{ curso.titulo }}" class="curso-img">
+    {% else %}
+      <img src="{% static 'img/default_curso.jpg' %}" alt="Sin imagen" class="curso-img">
+    {% endif %}
+
+    <h2>{{ curso.titulo }}</h2>
+    <p>{{ curso.descripcion|truncatewords:25 }}</p>
+
+    <a href="{% url 'detalle_curso' curso.id %}" class="btn-ver">Ver contenido</a>
+  </div>
+  {% empty %}
+  <p class="no-cursos">No estás inscrito en ningún curso todavía.</p>
+  {% endfor %}
+</div>
+
+{% if user.role == 'profesor' %}
+  <div style="text-align:center; margin-bottom: 80px;">
+    <a href="{% url 'crear_curso' %}" class="btn-ver" style="max-width:260px;">
+      ➕ Crear nuevo curso
+    </a>
+  </div>
+{% endif %}
+
+
+<script>
+const title = document.getElementById('animated-title');
+const text = title.textContent;
+title.innerHTML = '';
+text.split('').forEach((char, i) => {
+  const span = document.createElement('span');
+  span.textContent = char;
+  span.style.animationDelay = (i * 0.15) + 's';
+  title.appendChild(span);
+});
+</script>
+
+{% endblock %}

@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="container my-5">
+
+  <div class="p-4 rounded-4 shadow" style="background:white;">
+
+    <h1 class="text-center mb-4" style="color: var(--principal); font-weight:700;">
+      Mi Carrito
+    </h1>
+
+    {% if cursos %}
+      <div class="table-responsive">
+        <table class="table align-middle">
+          <thead style="background: var(--morado); color:white;">
+            <tr>
+              <th>Curso</th>
+              <th class="text-center">Precio</th>
+              <th class="text-center">Acción</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {% for curso in cursos %}
+            <tr>
+              <td style="font-weight:600;">{{ curso.titulo }}</td>
+
+              <td class="text-center">
+                <span class="badge bg-success" style="font-size:1rem;">
+                  ${{ curso.precio }}
+                </span>
+              </td>
+
+              <td class="text-center">
+                <form action="{% url 'eliminar_del_carrito' curso.id %}" method="post">
+                  {% csrf_token %}
+                  <button type="submit"
+                    class="btn btn-danger btn-sm px-3 rounded-3"
+                    style="background:#b97acc; border:none;">
+                    Quitar
+                  </button>
+                </form>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+      <div class="text-end fs-4 fw-bold mt-3">
+        Total: ${{ total }}
+      </div>
+
+      <div class="d-flex justify-content-between mt-4">
+
+        <a href="{% url 'catalogo' %}"
+           class="btn px-4 py-2 rounded-3"
+           style="background:#b97acc; color:white;">
+          ← Volver al Catálogo
+        </a>
+
+        <form action="{% url 'comprar_carrito' %}" method="post">
+          {% csrf_token %}
+          <button type="submit"
+            class="btn px-4 py-2 text-white rounded-3"
+            style="background: var(--principal); font-weight:600;">
+            Proceder al Pago 
+          </button>
+        </form>
+
+      </div>
+
+    {% else %}
+
+      <p class="text-center fs-5 mt-3">Tu carrito está vacío.</p>
+
+      <div class="text-center mt-4">
+        <a href="{% url 'catalogo' %}"
+           class="btn px-4 py-2 rounded-3"
+           style="background:#b97acc; color:white;">
+          Volver al Catálogo
+        </a>
+      </div>
+
+    {% endif %}
+  </div>
+</div>
+
+{% endblock %}
